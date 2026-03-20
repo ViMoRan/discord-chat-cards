@@ -1,0 +1,66 @@
+/* ========== 1. 消息整体卡片化 ========== */
+
+li[class*="messageListItem"]:not(:has(pre))>div[class*="message"] {
+    background-color: rgba(255, 255, 255, 0.05);
+    /* 无论多黑的背景都能提亮一层浮出 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    /* 立体悬浮阴影 */
+    border-radius: 12px;
+    margin: 16px 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-right: 16px;
+    /* 核心修复点：千万不要加跨级 padding-left，必须保留官方默认的 72px 给头像留足无冲突空间！ */
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* 鼠标滑过普通卡片时的交互反馈 */
+li[class*="messageListItem"]:not(:has(pre))>div[class*="message"]:hover {
+    background-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+/* ========== 2. 专属的回复引用长竖线 ============ */
+
+/* 彻底抹杀官方原始的 L 型弯曲折线 */
+div[class*="repliedMessage" i]::before,
+[class*="spine" i] {
+    display: none !important;
+}
+
+/* 只要是“回复/引用”，就在整个气泡卡片的最左侧附上贯通的长粗竖线 */
+li[class*="messageListItem"]:has(div[class*="repliedMessage"]):not(:has(pre))>div[class*="message"] {
+    border-left: 4px solid transparent;
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+}
+
+/* ========== 3. 被@提及或引用时的特殊高亮 ========== */
+
+li[class*="messageListItem"]>div[class*="mentioned"] {
+    background-color: var(--background-mentioned) !important;
+    border: 1px solid var(--info-warning-foreground);
+}
+
+li[class*="messageListItem"]>div[class*="mentioned"]::before {
+    display: none;
+}
+
+/* ========== 4. 长链接视觉智能截断 ========== */
+
+div[id^="message-content-"] a {
+    display: inline-block;
+    max-width: 100%; /* 放宽限制，让一般长度的链接能完整显示域名，只在快要撞倒屏幕边缘时才省略 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+}
+
+/* 禁用消息渐变效果 */
+:root {
+    --mention: transparent;
+    --mention-hover: transparent;
+    --reply: transparent;
+    --reply-hover: transparent;
+}
